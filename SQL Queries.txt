@@ -1,0 +1,290 @@
+SQL Queries :
+1)SELECT COUNT(*) FROM orders;
+
+Execution: Count()
+            9995
+2) SELECT *
+FROM orders
+LIMIT 5;
+
+Execution: 
+Segment	Country	City	State	Postal Code	Region	Product ID	Category	Sub-Category	Product Name	Sales	Quantity	Discount	Profit
+Consumer	United States	Henderson	Kentucky	42420	South	FUR-BO-10001798	Furniture	Bookcases	Bush Somerset Collection Bookcase	261.96	2	0	41.9136
+Consumer	United States	Henderson	Kentucky	42420	South	FUR-CH-10000454	Furniture	Chairs	Hon Deluxe Fabric Upholstered Stacking Chairs, Rounded Back	731.94	3	0	219.582
+Corporate	United States	Los Angeles	California	90036	West	OFF-LA-10000240	Office Supplies	Labels	Self-Adhesive Address Labels for Typewriters by Universal	14.62	2	0	6.8714
+Consumer	United States	Fort Lauderdale	Florida	33311	South	FUR-TA-10000577	Furniture	Tables	Bretford CR4500 Series Slim Rectangular Table	957.5775	5	0.45	-383.031
+
+3) SELECT
+    COUNT(*) AS header_rows
+FROM orders
+WHERE "Sales" = 'Sales';
+Execution: 
+9995
+
+4) SELECT name
+FROM sqlite_master
+WHERE type = 'table';
+Execution: orders
+
+5) SELECT * 
+FROM orders 
+LIMIT 3;
+Execution:
+ Row ID	Order ID	Order Date	Ship Date	Ship Mode	Customer ID	Customer Name	Segment	Country	City	State	Postal Code	Region	Product ID	Category	Sub-Category	Product Name	Sales	Quantity	Discount	Profit
+1	CA-2016-152156	11/8/2016	11/11/2016	Second Class	CG-12520	Claire Gute	Consumer	United States	Henderson	Kentucky	42420	South	FUR-BO-10001798	Furniture	Bookcases	Bush Somerset Collection Bookcase	261.96	2	0	41.9136
+2	CA-2016-152156	11/8/2016	11/11/2016	Second Class	CG-12520	Claire Gute	Consumer	United States	Henderson	Kentucky	42420	South	FUR-CH-10000454	Furniture	Chairs	Hon Deluxe Fabric Upholstered Stacking Chairs, Rounded Back	731.94	3	0	219.582
+
+6) SELECT
+    SUM(CAST(field18 AS REAL)) AS total_sales,
+    SUM(CAST(field21 AS REAL)) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID';
+Execution: 2297200.8603	286397.0217
+
+7) SELECT
+    field15 AS category,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY field15
+ORDER BY total_sales DESC;
+Execution: 
+Technology	836154.03	145454.95
+Furniture	741999.8	18451.27
+Office Supplies	719047.03	122490.8
+
+8) SELECT
+    field16 AS sub_category,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY field16
+ORDER BY total_profit ASC;
+Execution: 
+
+Tables	206965.53	-17725.48
+Bookcases	114880.0	-3472.56
+Supplies	46673.54	-1189.1
+Fasteners	3024.28	949.52
+Machines	189238.63	3384.76
+Labels	12486.31	5546.25
+Art	27118.79	6527.79
+Envelopes	16476.4	6964.18
+Furnishings	91705.16	13059.14
+Appliances	107532.16	18138.01
+Storage	223843.61	21278.83
+Chairs	328449.1	26590.17
+Binders	203412.73	30221.76
+Paper	78479.21	34053.57
+Accessories	167380.32	41936.64
+Phones	330007.05	44515.73
+Copiers	149528.03	55617.82
+
+9) SELECT
+    field20 AS discount,
+    COUNT(*) AS orders,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+  AND field16 = 'Tables'
+GROUP BY field20
+ORDER BY CAST(field20 AS REAL);
+Execution: 
+0	72	71578.76	13276.3
+0.2	71	45430.23	-303.56
+0.3	54	25182.15	-3402.33
+0.4	75	45614.41	-16187.4
+0.45	11	5484.97	-2493.11
+0.5	36	13675.01	-8615.39
+
+10) SELECT
+    field13 AS region,
+    COUNT(*) AS orders,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+  AND field16 = 'Tables'
+GROUP BY field13
+ORDER BY total_profit ASC;
+Execution: East	80	39139.81	-11025.38
+South	51	43916.19	-4623.06
+Central	72	39154.97	-3559.65
+West	116	84754.56	1482.61
+
+11) SELECT
+    field17 AS product_name,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+  AND field16 = 'Tables'
+  AND field13 = 'East'
+GROUP BY field17
+ORDER BY total_profit ASC
+LIMIT 10;
+Execution: 
+Riverside Furniture Oval Coffee Table, Oval End Table, End Table with Drawer	3958.53	-1187.56
+Chromcraft Bull-Nose Wood 48" x 96" Rectangular Conference Tables	2369.21	-754.84
+Hon 94000 Series Round Tables	1421.66	-734.53
+Bevis Oval Conference Table, Walnut	1879.06	-720.3
+Bretford Rectangular Conference Table Tops	3159.49	-605.57
+Balt Solid Wood Round Tables	1071.58	-553.65
+Chromcraft Round Conference Tables	1969.48	-508.93
+Bush Advantage Collection Racetrack Conference Table	1272.63	-466.63
+Office Impressions End Table, 20-1/2"H x 24"W x 20"D	2126.32	-425.26
+Chromcraft Rectangular Conference Tables	1564.0	-417.07
+
+12) SELECT
+    field20 AS discount,
+    COUNT(*) AS orders,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit,
+    ROUND(
+        SUM(CAST(field21 AS REAL)) * 100.0 /
+        SUM(CAST(field18 AS REAL)),
+        2
+    ) AS profit_margin_pct
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY field20
+ORDER BY CAST(field20 AS REAL);
+Execution:
+ 0	4798	1087908.47	320987.6	29.51
+0.1	94	54369.35	9029.18	16.61
+0.15	52	27558.52	1418.99	5.15
+0.2	3657	764594.37	90337.31	11.82
+0.3	227	103226.65	-10369.28	-10.05
+0.32	27	14493.46	-2391.14	-16.5
+0.4	206	116417.78	-23057.05	-19.81
+0.45	11	5484.97	-2493.11	-45.45
+0.5	66	58918.54	-20506.43	-34.8
+0.6	138	6644.7	-5944.66	-89.46
+0.7	418	40620.28	-40075.36	-98.66
+0.8	300	16963.76	-30539.04	-180.03
+
+13) 
+SELECT
+    COUNT(*) AS total_orders,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit,
+    ROUND(
+        SUM(CAST(field21 AS REAL)) * 100.0 /
+        SUM(CAST(field18 AS REAL)),
+        2
+    ) AS profit_margin_pct,
+    ROUND(
+        SUM(CAST(field18 AS REAL)) / COUNT(*),
+        2
+    ) AS avg_order_value
+FROM orders
+WHERE field1 != 'Row ID'; 
+Execution: 
+9994	2297200.86	286397.02	12.47	229.86
+
+SELECT
+    SUBSTR(field3, -4) AS year,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY SUBSTR(field3, -4)
+ORDER BY year;
+Execution:
+2014	484247.5	49543.97
+2015	470532.51	61618.6
+2016	609205.6	81795.17
+2017	733215.26	93439.27
+
+14) SELECT
+    field7 AS customer_name,
+    COUNT(*) AS orders,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS total_sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS total_profit
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY field7
+ORDER BY total_sales DESC
+LIMIT 10;
+Execution:
+Sean Miller	15	25043.05	-1980.74
+Tamara Chand	12	19052.22	8981.32
+Raymond Buch	18	15117.34	6976.1
+Tom Ashbrook	10	14595.62	4703.79
+Adrian Barton	20	14473.57	5444.81
+Ken Lonsdale	29	14175.23	806.85
+Sanjit Chand	22	14142.33	5757.41
+Hunter Lopez	11	12873.3	5622.43
+Sanjit Engle	19	12209.44	2650.68
+Christopher Conant	11	12129.07	2177.05
+
+15) SELECT
+    field15 AS category,
+    COUNT(*) AS records,
+    ROUND(SUM(CAST(field18 AS REAL)), 2) AS sales,
+    ROUND(SUM(CAST(field21 AS REAL)), 2) AS profit,
+    ROUND(
+        SUM(CAST(field21 AS REAL)) * 100.0 /
+        SUM(CAST(field18 AS REAL)), 2
+    ) AS profit_margin_pct
+FROM orders
+WHERE field1 != 'Row ID'
+GROUP BY field15
+ORDER BY profit DESC;
+Execution: 
+Technology	1847	836154.03	145454.95	17.4
+Office Supplies	6026	719047.03	122490.8	17.04
+Furniture	2121	741999.8	18451.27	2.49
+
+16) SELECT
+    field1 AS Row_ID,
+    field2 AS Order_ID,
+    field3 AS Order_Date,
+    field4 AS Ship_Date,
+    field5 AS Ship_Mode,
+    field6 AS Customer_ID,
+    field7 AS Customer_Name,
+    field8 AS Segment,
+    field9 AS Country,
+    field10 AS City,
+    field11 AS State,
+    field12 AS Postal_Code,
+    field13 AS Region,
+    field14 AS Product_ID,
+    field15 AS Category,
+    field16 AS Sub_Category,
+    field17 AS Product_Name,
+    field18 AS Sales,
+    field19 AS Quantity,
+    field20 AS Discount,
+    field21 AS Profit
+FROM orders
+WHERE field1 != 'Row ID';
+
+Execution: 
+ 
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
