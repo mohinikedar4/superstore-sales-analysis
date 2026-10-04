@@ -15,15 +15,16 @@ The goal of this analysis is to identify key business trends, understand profita
 * Microsoft Excel / CSV
 * GitHub
 
+
 ## 📁 Project Files
 
-| File                   | Description                                     |
-| ---------------------- | ----------------------------------------------- |
-| `Superstore_Clean.csv` | Cleaned dataset used for analysis               |
-| `SQL Queries`          | SQL queries used for data cleaning and analysis |
-| `Power BI Dashboard`   | Interactive Power BI dashboard                  |
-| `Dashboard Images`     | Screenshots of the final dashboard              |
-
+| File | Description |
+|---|---|
+| `Superstore data.csv` | Superstore dataset used for analysis |
+| `SQL Queries.txt` | SQL queries used for data cleaning and analysis |
+| `SUPERSTORE SALES DASHBOARD.pbix` | Power BI dashboard |
+| `Dashboard image 1.png` | Dashboard screenshot |
+| `Dashboard Image 2.png` | Dashboard screenshot |
 ## 📌 Key KPIs
 
 | KPI                   |   Result |
